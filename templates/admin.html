@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Guestbook · Fairytale Birthday{% endblock %}
+{% block content %}
+<section class="admin-page">
+  <header class="admin-header">
+    <div>
+      <p class="eyebrow">A LITTLE LOOK AT THE GUESTBOOK</p>
+      <h1 class="script-heading">The Guest List</h1>
+      <p class="admin-subtitle">{{ party.host }}'s fairytale celebration</p>
+    </div>
+    <a class="logout-link" href="{{ url_for('logout') }}">Log out ↗</a>
+  </header>
+
+  <div class="stats-grid">
+    <div class="stat-card glass-card tilt-card"><span class="stat-icon">♡</span><span class="stat-number">{{ total }}</span><span class="stat-label">TOTAL REPLIES</span></div>
+    <div class="stat-card glass-card tilt-card"><span class="stat-icon">✿</span><span class="stat-number">{{ yes_count }}</span><span class="stat-label">JOINING THE MAGIC</span></div>
+    <div class="stat-card glass-card tilt-card"><span class="stat-icon">☾</span><span class="stat-number">{{ no_count }}</span><span class="stat-label">UNABLE TO ATTEND</span></div>
+  </div>
+
+  <div class="guestbook-card glass-card">
+    <div class="guestbook-heading">
+      <div>
+        <h2>Guestbook</h2>
+        <p>Every reply is a little bit of love.</p>
+      </div>
+      <div class="filter-tabs">
+        <a class="{{ 'active' if show == 'all' else '' }}" href="{{ url_for('admin', show='all') }}">All</a>
+        <a class="{{ 'active' if show == 'yes' else '' }}" href="{{ url_for('admin', show='yes') }}">Yes</a>
+        <a class="{{ 'active' if show == 'no' else '' }}" href="{{ url_for('admin', show='no') }}">No</a>
+      </div>
+    </div>
+
+    {% if rows %}
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>GUEST</th><th>REPLY</th><th>RECEIVED</th><th></th></tr></thead>
+        <tbody>
+        {% for row in rows %}
+          <tr>
+            <td class="guest-name-cell">{{ row.name }}</td>
+            <td><span class="status-badge {{ 'status-yes' if row.answer == 'Yes' else 'status-no' }}">{{ '♡ ' if row.answer == 'Yes' else '☾ ' }}{{ row.answer }}</span></td>
+            <td class="date-cell">{{ row.answered_at }}</td>
+            <td>
+              <form method="POST" action="{{ url_for('delete_response', response_id=row.id, show=show) }}" onsubmit="return confirm('Delete this RSVP?');">
+                <button class="delete-button" type="submit" aria-label="Delete {{ row.name }}">✕</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <div class="empty-state"><span>✿</span><h3>No replies just yet</h3><p>Your guestbook is waiting for its first little note.</p></div>
+    {% endif %}
+  </div>
+  <div class="admin-bottom"><a href="{{ url_for('index') }}">♡ View invitation</a></div>
+</section>
+{% endblock %}

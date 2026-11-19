@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}You're Invited · {{ party.host }}'s Birthday{% endblock %}
+{% block content %}
+<section class="invitation-page">
+  <div class="top-note"><span>✧</span> A LITTLE MAGIC IS ON ITS WAY <span>✧</span></div>
+
+  {% if guest %}
+  <section class="thank-you-card glass-card tilt-card">
+    <div class="tiny-crown">♕</div>
+    <p class="eyebrow">YOUR RSVP HAS BEEN RECEIVED</p>
+    <h1 class="script-heading">Thank you, {{ guest.name }}!</h1>
+    {% if guest.answer == "Yes" %}
+      <p class="lead">Hooray! We're so excited to celebrate with you. Your place in this little fairytale is waiting. <span class="inline-heart">♥</span></p>
+      <div class="answer-pill yes-pill">♡ COUNTING YOU IN ♡</div>
+      <div class="mini-confetti">✦　✧　✿　✧　✦</div>
+    {% else %}
+      <p class="lead">Thank you for letting us know. You'll be missed, and we're sending a little sparkle your way.</p>
+      <div class="answer-pill no-pill">THANK YOU FOR REPLYING</div>
+    {% endif %}
+    <a class="text-link" href="{{ url_for('index', change=1) }}">Change my RSVP</a>
+  </section>
+  {% else %}
+  <section class="envelope-scene" id="envelopeScene">
+    <div class="instruction">tap the envelope to open your invitation</div>
+    <button class="envelope-button" id="openEnvelope" type="button" aria-label="Open your birthday invitation">
+      <div class="envelope" id="envelope">
+        <div class="envelope-back"></div>
+        <div class="letter-peek">
+          <span class="letter-sparkle">✧</span>
+          <span class="letter-title">You're invited</span>
+          <span class="letter-subtitle">to a magical celebration</span>
+        </div>
+        <div class="envelope-flap"></div>
+        <div class="envelope-front"></div>
+        <div class="wax-seal">♡</div>
+      </div>
+    </button>
+    <div class="envelope-caption">a special delivery, just for you</div>
+  </section>
+
+  <section class="invitation-card glass-card tilt-card" id="invitationCard" aria-hidden="true">
+    <div class="corner-flower flower-a">✿</div>
+    <div class="corner-flower flower-b">✿</div>
+    <div class="card-inner">
+      <div class="ornament">✧　❀　✧</div>
+      <p class="eyebrow">YOU ARE CORDIALLY INVITED TO</p>
+      <h1 class="script-heading">A Fairytale Birthday</h1>
+      <p class="intro-line">a day sprinkled with love, laughter & magic</p>
+      <div class="divider-flourish"><span></span>♡<span></span></div>
+      <p class="celebrant-label">THE CELEBRATION OF</p>
+      <h2 class="celebrant-name">{{ party.host }}</h2>
+      <p class="age-line">turning <strong>{{ party.age }}</strong></p>
+
+      <div class="details-grid">
+        <div class="detail-item">
+          <span class="detail-icon">☾</span>
+          <span class="detail-label">THE DATE</span>
+          <strong>{{ party.date }}</strong>
+        </div>
+        <div class="detail-item">
+          <span class="detail-icon">♡</span>
+          <span class="detail-label">THE TIME</span>
+          <strong>{{ party.time }}</strong>
+        </div>
+        <div class="detail-item detail-wide">
+          <span class="detail-icon">⌖</span>
+          <span class="detail-label">THE PLACE</span>
+          <strong>{{ party.place }}</strong>
+        </div>
+      </div>
+
+      <p class="party-message">{{ party.message }}</p>
+      <div class="dress-code"><span>✧</span> DRESS CODE: {{ party.dress_code }} <span>✧</span></div>
+
+      <div class="rsvp-panel">
+        <p class="rsvp-title">Will you join the magic?</p>
+        <p class="rsvp-deadline">Kindly reply by {{ party.rsvp_by }}</p>
+        <form action="{{ url_for('rsvp') }}" method="POST" class="rsvp-form" id="rsvpForm">
+          <label class="sr-only" for="guestName">Your name</label>
+          <input id="guestName" type="text" name="name" maxlength="60" placeholder="Your lovely name..." required autocomplete="name">
+          <div class="rsvp-buttons">
+            <button type="submit" name="answer" value="Yes" class="rsvp-button yes-button">
+              <span>♡</span> Yes, I'll be there!
+            </button>
+            <button type="submit" name="answer" value="No" class="rsvp-button no-button">
+              Maybe next time
+            </button>
+          </div>
+        </form>
+      </div>
+      <p class="closing-note">can't wait to make memories with you <span>♡</span></p>
+      <div class="bottom-ornament">✧ ❀ ✧ ❀ ✧</div>
+    </div>
+  </section>
+  {% endif %}
+  <div class="admin-shortcut"><a href="{{ url_for('login') }}">host's corner</a></div>
+</section>
+{% endblock %}

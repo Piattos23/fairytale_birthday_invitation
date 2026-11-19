@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: fairytale-birthday-invitation
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: birthday-rsvp-db
+          property: connectionString
+
+databases:
+  - name: birthday-rsvp-db
+    databaseName: birthday_rsvp
+    user: birthday_rsvp_user
